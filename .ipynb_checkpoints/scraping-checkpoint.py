@@ -126,7 +126,15 @@ def main(url, dict_annonces):
     """Main, enregistre le dictionnaire sous forme de json dans le wd."""
     
     driver = setup(url)
-    dict_annonces = get_page_details(driver, page(driver), dict_annonces)
+    while True:
+
+        dict_annonces = get_page_details(driver, page(driver), dict_annonces)
         
-    with open("file.json", "w") as fp:
-        json.dump(dict_annonces, fp, indent = 4)
+        with open("file.json", "w") as fp:
+            json.dump(dict_annonces, fp, indent = 4)
+        
+        try:
+            driver.find_element_by_link_text("Page suivante").click()
+        except Exception as e:
+            print(e)
+            break
